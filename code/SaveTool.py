@@ -174,7 +174,7 @@ def mainFunktion(path):
             elif user_input == 2:
                 show_all(path)
             elif user_input == 4:
-                delete_input = input(bcolors.BOLD + "\nTitle: " + bcolors.ENDC)
+                delete_input = session.prompt("\nTitle: ")
                 delete(delete_input, path)
             elif user_input == 5:
                 os.system('cls')
@@ -194,7 +194,7 @@ def mainFunktion(path):
             print(bcolors.FAIL + "\n--------------\nEXPECTED ERROR\n--------------" + bcolors.ENDC)
 
 if read_config() == 'None':
-    user_path = input("Please input your path to the json file, where you want to save your data: ")
+    user_path = input('Please input your path to the json file, where you want to save your data (WITHOUT ""): ')
     create_config(user_path)
     mainFunktion(user_path)
 else:
