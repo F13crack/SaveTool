@@ -4,6 +4,7 @@ import os
 import sys
 from prompt_toolkit import PromptSession
 from prompt_toolkit.completion import WordCompleter
+import configparser
 
 class bcolors:
     HEADER = '\033[95m'
@@ -17,37 +18,66 @@ class bcolors:
     UNDERLINE = '\033[4m'
 
 
+def read_config():
+    # Create a ConfigParser object
+    config = configparser.ConfigParser()
+ 
+    # Read the configuration file
+    config.read('config.ini')
+ 
+    json_path = config.get('Database', 'json_path')
+ 
+    # Return a dictionary with the retrieved values
+    config_values = {
+        'json_path': json_path,
+    }
+ 
+    return config_values['json_path']
+
+
+def create_config(path):
+    config = configparser.ConfigParser()
+ 
+    config['Database'] = {'json_path': path}
+ 
+    # Write the configuration to a file
+    with open('config.ini', 'w') as configfile:
+        config.write(configfile)
+
+
+
+
 # A U T O C O M P E T E
-def load_suggestions():
-    with open('C:\\Users\\lucae\\Documents\\GitHub\\SaveTool\\code\\SavedContent.json', 'r') as file:
+def load_suggestions(path):
+    with open(path, 'r') as file:
         return json.load(file)
 # - - - - - - - - - - -
 
 
-def create_save(title, content):
+def create_save(title, content, path):
     try:
         os.system('cls')
-        with open('C:\\Users\\lucae\\Documents\\GitHub\\SaveTool\\code\\SavedContent.json', 'r') as file:
+        with open(path, 'r') as file:
             data = json.load(file)
     except (FileNotFoundError, json.JSONDecodeError):
         data={}
     data[title] = content
-    with open('C:\\Users\\lucae\\Documents\\GitHub\\SaveTool\\code\\SavedContent.json', 'w') as file:
+    with open(path, 'w') as file:
         json.dump(data, file, indent=4)
     print(bcolors.OKCYAN + "\n\n>> Data saved\n" + bcolors.ENDC)
 
 #IN WORK
-def change_data(title):
-    with open('C:\\Users\\lucae\\Documents\\GitHub\\SaveTool\\code\\SavedContent.json', 'r') as file:
+def change_data(title, path):
+    with open(path, 'r') as file:
         data = json.load(file)
     #print(data[title])
     input(data[title])
 #-------------
 
-def Search(title):
+def Search(title, path):
     try:
         os.system('cls')
-        with open('C:\\Users\\lucae\\Documents\\GitHub\\SaveTool\\code\\SavedContent.json', 'r') as file:
+        with open(path, 'r') as file:
             obj = json.load(file)
             if title in obj:
                 print(bcolors.OKCYAN + "\n\nHere is the result:\n------------------------------------------------------------\n" + bcolors.ENDC + obj[title] + bcolors.OKCYAN + "\n------------------------------------------------------------" + bcolors.ENDC)
@@ -56,29 +86,29 @@ def Search(title):
     except KeyError:
         print(bcolors.FAIL + "\n--------------\nUNEXPECTED ERROR\n--------------" + bcolors.ENDC)
 
-def show_all():
+def show_all(path):
     os.system('cls')
-    with open("C:\\Users\\lucae\\Documents\\GitHub\\SaveTool\\code\\SavedContent.json") as file:
+    with open(path) as file:
         data = json.load(file)
     print(bcolors.OKCYAN + "\n\nHere is the result:\n------------------------------------------------------------\n" + bcolors.ENDC)
     for title in sorted(data.keys(), key=str.casefold):
         print(bcolors.BOLD + ">> " + title + bcolors.ENDC)
     print(bcolors.OKCYAN + "\n------------------------------------------------------------" + bcolors.ENDC)
 
-def delete(title):
+def delete(title, path):
     os.system('cls')
-    with open('C:\\Users\\lucae\\Documents\\GitHub\\SaveTool\\code\\SavedContent.json') as file:
+    with open(path) as file:
         data = json.load(file)
     if title in data:
         del data[title]
         print(bcolors.WARNING + "\n>> Title '" + title + "' successfully deleted" + bcolors.ENDC)
     else:
         print(bcolors.FAIL + "\n>> NO TITLE FOUND" + bcolors.ENDC)
-    with open('C:\\Users\\lucae\\Documents\\GitHub\\SaveTool\\code\\SavedContent.json', 'w') as file:
+    with open(path, 'w') as file:
         json.dump(data, file, indent=4)
 
 
-def main():
+def mainFunktion(path):
     if len(sys.argv) > 1:
         if sys.argv[1] == "--help":
             print("""
@@ -102,13 +132,13 @@ def main():
     | / | /   |———  |     |     |   |  | \\/ |  |———
     |/  |/    |___  |___  |___  |___|  |    |  |___
                     
-                    ‾‾|‾‾  |‾‾‾|
+                      ‾‾|‾‾  |‾‾‾|
                         |    |   |
                         |    |___|
 
     |‾‾‾   |‾‾‾| \\     /  |‾‾‾  ‾‾|‾‾  |‾‾‾|  |‾‾‾|  |
     |———|  |___|  \\   /   |———    |    |   |  |   |  |
-    ___|  |   |   \\ /    |___    |    |___|  |___|  |___
+     ___|  |   |   \\ /    |___    |    |___|  |___|  |___
     ======================================================="""
 
         print(bcolors.OKGREEN + text + bcolors.ENDC)
@@ -117,14 +147,14 @@ def main():
 
     while True:
         print(bcolors.HEADER + "\n\n---------------- C O M M A N D S ---------------\n" + bcolors.ENDC + "1: Search \n2: Show all \n3: Save new \n4: Delete\n5: exit\n" + bcolors.HEADER + "------------------------------------------------" + bcolors.ENDC)
-        suggestions = load_suggestions()
+        suggestions = load_suggestions(path)
         completer = WordCompleter(suggestions, ignore_case=True)
         session = PromptSession(completer=completer)
         try:
             user_input = eval(input("> "))
             if user_input == 1:
                 searchTitle = session.prompt("\nTitle: ")
-                Search(searchTitle)
+                Search(searchTitle, path)
             elif user_input == 3:
                 newTitle = input(bcolors.BOLD + "\nTitle: " + bcolors.ENDC)
                 usr = input(bcolors.WARNING + "Do you want to paste the copied content (y/n)?" + bcolors.ENDC)
@@ -140,19 +170,19 @@ def main():
                         else:
                             break
                     newContent = '\n'.join(lines)
-                create_save(newTitle, newContent)
+                create_save(newTitle, newContent, path)
             elif user_input == 2:
-                show_all()
+                show_all(path)
             elif user_input == 4:
                 delete_input = input(bcolors.BOLD + "\nTitle: " + bcolors.ENDC)
-                delete(delete_input)
+                delete(delete_input, path)
             elif user_input == 5:
                 os.system('cls')
                 print(bcolors.WARNING + "\n\n>>> program closed <<<\n" + bcolors.ENDC)
                 quit()
             elif user_input == 6:
                 usr_in = input(">> ")
-                change_data(usr_in)
+                change_data(usr_in, path)
             else:
                 os.system('cls')
         except KeyboardInterrupt:
@@ -162,3 +192,13 @@ def main():
         except (NameError, SyntaxError):
             os.system('cls')
             print(bcolors.FAIL + "\n--------------\nEXPECTED ERROR\n--------------" + bcolors.ENDC)
+
+
+
+if read_config() == 'None':
+    user_path = input("Please input your path to the json file, where you'll save your data: ")
+    create_config(user_path)
+    mainFunktion(user_path)
+else:
+    path = read_config()
+    mainFunktion(path)
