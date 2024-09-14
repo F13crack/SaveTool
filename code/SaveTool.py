@@ -196,7 +196,7 @@ def mainFunktion(path):
 
 
 if read_config() == 'None':
-    user_path = input("Please input your path to the json file, where you'll save your data: ")
+    user_path = input("Please input your path to the json file, where you want to save your data: ")
     create_config(user_path)
     mainFunktion(user_path)
 else:
