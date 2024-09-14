@@ -42,3 +42,8 @@ I wrote this "masterpiece" ;p during my Apprenticeship. I wanted to save a code-
 >Now you should be able to start SaveTool.py via ```savetool```
 >
 ></details>
+
+# License/Terms of use
+Feel free to use the programm for yourself and group activities (don't know what you could do with such a programm in a group ¯\_(ツ)_/¯ ).
+Don't do soething with this code that could harm other beings. I, the developer, do not take any responsibility or liability for damages and/or problems to your system that my have been caused by my program.
+Feel free to costumise and modify the code.
