@@ -142,7 +142,7 @@ def mainFunktion(path):
     ======================================================="""
 
         print(bcolors.OKGREEN + text + bcolors.ENDC)
-        print("                By Luca Elija Mauro")
+        print("                By Luca Mauro aka F13")
 
 
     while True:
@@ -192,8 +192,6 @@ def mainFunktion(path):
         except (NameError, SyntaxError):
             os.system('cls')
             print(bcolors.FAIL + "\n--------------\nEXPECTED ERROR\n--------------" + bcolors.ENDC)
-
-
 
 if read_config() == 'None':
     user_path = input("Please input your path to the json file, where you want to save your data: ")
