@@ -1,7 +1,7 @@
 # SaveTool
  A tool for managing and saving code snippets and other stuff.
 ### History
-I wrote this "masterpiece" ;p during my Apprenticeship. I wanted to save a code-snippet from one of my projects, but I didn't want to use a txt file and especially not paper. So I made a tool for purpose.
+I wrote this "masterpiece" ;) during my Apprenticeship. I wanted to save a code-snippet from one of my projects, but I didn't want to use a txt file and especially not paper. So I made a tool for purpose.
 
 
 > [!IMPORTANT]
