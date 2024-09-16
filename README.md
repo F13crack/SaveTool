@@ -6,7 +6,7 @@ I wrote this "masterpiece" ;) during my Apprenticeship. I wanted to save a code-
 
 > [!IMPORTANT]
 ># Requirements
->- Python installed on you computer
+>- Python is installed on you computer
 >- following libaries installed
 >  ```
 >  json
