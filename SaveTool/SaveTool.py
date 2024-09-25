@@ -22,15 +22,9 @@ class bcolors:
 
 
 def read_config():
-    # Create a ConfigParser object
     config = configparser.ConfigParser()
- 
-    # Read the configuration file
     config.read('config.ini')
- 
     json_path = config.get('Database', 'json_path')
- 
-    # Return a dictionary with the retrieved values
     config_values = {
         'json_path': json_path,
     }
@@ -40,10 +34,7 @@ def read_config():
 
 def create_config(path):
     config = configparser.ConfigParser()
- 
     config['Database'] = {'json_path': path}
- 
-    # Write the configuration to a file
     with open('config.ini', 'w') as configfile:
         config.write(configfile)
 
@@ -87,15 +78,12 @@ def edit(title, path):
         os.system('cls')
 
 def SaveEdited(title):
-    #title = titleedit
     t = text.get("1.0", "end-1c")
-    #.encode('utf-8')
     with open("Teste.txt", "w", encoding="utf-8") as file:
         file.write(t)
     file.close()
     os.remove("Teste.txt")
     root.destroy()
-    
     create_save(title, t)
 
 def create_save(title, content, path):
@@ -160,7 +148,6 @@ def mainFunction(path):
             quit()
     else:
         os.system('cls')
-        #print(bcolors.OKGREEN + bcolors.BOLD + "\n--- WELCOME - TO - SAVETOOL （￣︶￣）↗ ---" + bcolors.ENDC + bcolors.OKBLUE + "\nBy Luca Elija Mauro\n\n" + bcolors.ENDC)
 
         text = """
     =======================================================
