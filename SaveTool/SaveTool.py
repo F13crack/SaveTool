@@ -5,6 +5,9 @@ import sys
 from prompt_toolkit import PromptSession
 from prompt_toolkit.completion import WordCompleter
 import configparser
+from tkinter import *
+import tkinter as tk
+from tkinter import messagebox
 
 class bcolors:
     HEADER = '\033[95m'
@@ -45,14 +48,55 @@ def create_config(path):
         config.write(configfile)
 
 
-
-
 # A U T O C O M P E T E
 def load_suggestions(path):
     with open(path, 'r') as file:
         return json.load(file)
 # - - - - - - - - - - -
 
+def window_exit():
+    close = messagebox.askyesno("Exit without saving?", "Are you sure you want to exit without saving?")
+    if close:
+        os.system('cls')
+        print(bcolors.WARNING + "\n\n>> closed window without saving\n" + bcolors.ENDC)
+        root.destroy()
+
+def edit(title, path):
+    global root
+    global text
+    root = tk.Tk()
+    root.geometry("850x490")
+    root.title("SaveTool-Editor")
+    root.configure(bg="#e6e6e6")
+    fram = tk.Frame(root)
+    fram.pack(fill=BOTH, expand=True)
+    S = Scrollbar(fram)
+    S.pack(side=RIGHT, fill=Y)
+    text = Text(fram)
+    text.pack(fill=BOTH, expand=True)
+    S.config(command=text.yview)
+    text.config(yscrollcommand=S.set)
+    with open(path, "r") as f:
+        data = json.load(f)
+    text.insert(END, data[title])
+    save_button = tk.Button(root, text=">> SAVE <<", command=lambda: SaveEdited(title), bg="#29d65d")
+    save_button.pack(side=BOTTOM)
+    root.protocol("WM_DELETE_WINDOW", window_exit)
+    root.mainloop()
+    if root.mainloop() == False:
+        os.system('cls')
+
+def SaveEdited(title):
+    #title = titleedit
+    t = text.get("1.0", "end-1c")
+    #.encode('utf-8')
+    with open("Teste.txt", "w", encoding="utf-8") as file:
+        file.write(t)
+    file.close()
+    os.remove("Teste.txt")
+    root.destroy()
+    
+    create_save(title, t)
 
 def create_save(title, content, path):
     try:
@@ -66,14 +110,6 @@ def create_save(title, content, path):
         json.dump(data, file, indent=4)
     print(bcolors.OKCYAN + "\n\n>> Data saved\n" + bcolors.ENDC)
 
-#IN WORK
-def change_data(title, path):
-    with open(path, 'r') as file:
-        data = json.load(file)
-    #print(data[title])
-    input(data[title])
-#-------------
-
 def Search(title, path):
     try:
         os.system('cls')
@@ -82,7 +118,7 @@ def Search(title, path):
             if title in obj:
                 print(bcolors.OKCYAN + "\n\nHere is the result:\n------------------------------------------------------------\n" + bcolors.ENDC + obj[title] + bcolors.OKCYAN + "\n------------------------------------------------------------" + bcolors.ENDC)
             else:
-                print(bcolors.FAIL + "\n>> NO CONTENT FOUND" + bcolors.ENDC)
+                print(bcolors.FAIL + "\n\n>> NO CONTENT FOUND" + bcolors.ENDC)
     except KeyError:
         print(bcolors.FAIL + "\n--------------\nUNEXPECTED ERROR\n--------------" + bcolors.ENDC)
 
@@ -108,7 +144,7 @@ def delete(title, path):
         json.dump(data, file, indent=4)
 
 
-def mainFunktion(path):
+def mainFunction(path):
     if len(sys.argv) > 1:
         if sys.argv[1] == "--help":
             print("""
@@ -124,7 +160,7 @@ def mainFunktion(path):
             quit()
     else:
         os.system('cls')
-        #print(bcolors.OKGREEN + bcolors.BOLD + "\n--- WELCOME - TO - SAVETOOL ï¼ˆï¿£ï¸¶ï¿£ï¼‰â†— ---" + bcolors.ENDC + bcolors.OKBLUE + "\nBy Luca Elija Mauro\n\n" + bcolors.ENDC)
+        #print(bcolors.OKGREEN + bcolors.BOLD + "\n--- WELCOME - TO - SAVETOOL （￣︶￣）↗ ---" + bcolors.ENDC + bcolors.OKBLUE + "\nBy Luca Elija Mauro\n\n" + bcolors.ENDC)
 
         text = """
     =======================================================
@@ -132,25 +168,25 @@ def mainFunktion(path):
     | / | /   |———  |     |     |   |  | \\/ |  |———
     |/  |/    |___  |___  |___  |___|  |    |  |___
                     
-                      ‾‾|‾‾  |‾‾‾|
+                    ‾‾|‾‾  |‾‾‾|
                         |    |   |
                         |    |___|
 
     |‾‾‾   |‾‾‾| \\     /  |‾‾‾  ‾‾|‾‾  |‾‾‾|  |‾‾‾|  |
     |———|  |___|  \\   /   |———    |    |   |  |   |  |
-     ___|  |   |   \\ /    |___    |    |___|  |___|  |___
+    ___|  |   |   \\ /    |___    |    |___|  |___|  |___
     ======================================================="""
 
         print(bcolors.OKGREEN + text + bcolors.ENDC)
-        print("                By Luca Mauro aka F13")
-
+        print("                By Luca Elija Mauro")
 
     while True:
-        print(bcolors.HEADER + "\n\n---------------- C O M M A N D S ---------------\n" + bcolors.ENDC + "1: Search \n2: Show all \n3: Save new \n4: Delete\n5: exit\n" + bcolors.HEADER + "------------------------------------------------" + bcolors.ENDC)
-        suggestions = load_suggestions(path)
-        completer = WordCompleter(suggestions, ignore_case=True)
-        session = PromptSession(completer=completer)
         try:
+            print(bcolors.HEADER + "\n\n---------------- C O M M A N D S ---------------\n" + bcolors.ENDC + "1: Search \n2: Show all \n3: Save new \n4: Edit\n5: Delete\n6: EXIT\n" + bcolors.HEADER + "------------------------------------------------" + bcolors.ENDC)
+            suggestions = load_suggestions(path)
+            completer = WordCompleter(suggestions, ignore_case=True)
+            session = PromptSession(completer=completer)
+            
             user_input = eval(input("> "))
             if user_input == 1:
                 searchTitle = session.prompt("\nTitle: ")
@@ -173,30 +209,33 @@ def mainFunktion(path):
                 create_save(newTitle, newContent, path)
             elif user_input == 2:
                 show_all(path)
-            elif user_input == 4:
+            elif user_input == 5:
                 delete_input = session.prompt("\nTitle: ")
                 delete(delete_input, path)
-            elif user_input == 5:
+            elif user_input == 6:
                 os.system('cls')
                 print(bcolors.WARNING + "\n\n>>> program closed <<<\n" + bcolors.ENDC)
                 quit()
-            elif user_input == 6:
-                usr_in = input(">> ")
-                change_data(usr_in, path)
+            elif user_input == 4:
+                usr_in = session.prompt("\nTitle: ")
+                edit(usr_in, path)
             else:
                 os.system('cls')
         except KeyboardInterrupt:
             os.system('cls')
             print(bcolors.WARNING + "\n\n>>> program stopped <<<\n" + bcolors.ENDC)
             quit()
-        except (NameError, SyntaxError):
+        except (NameError):
             os.system('cls')
             print(bcolors.FAIL + "\n--------------\nEXPECTED ERROR\n--------------" + bcolors.ENDC)
+        except (SyntaxError):
+            os.system('cls')
+            print(bcolors.WARNING + "\n>> no input" + bcolors.ENDC)
 
 if read_config() == 'None':
     user_path = input('Please input your path to the json file, where you want to save your data (WITHOUT ""): ')
     create_config(user_path)
-    mainFunktion(user_path)
+    mainFunction(user_path)
 else:
     path = read_config()
-    mainFunktion(path)
+    mainFunction(path)
