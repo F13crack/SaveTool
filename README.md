@@ -43,6 +43,9 @@ I wrote this "masterpiece" ;) during my Apprenticeship. I wanted to save a code-
 >
 ></details>
 
+## If you have any problems, feel free to contact me :)
+ 
+
 # future plans
 I'm currently working on a function to edit the saved content
 
